@@ -1,0 +1,88 @@
+{
+  "name": "landsat-index",
+  "runtime": "nodejs",
+  "description": "Handler for root and sitemap proxies",
+  "customName": false,
+  "customRole": false,
+  "handler": "landsat/root/handler.handler",
+  "timeout": 6,
+  "memorySize": 256,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": [],
+    "envVars": [],
+    "optimize": {
+      "transforms": [
+        "brfs"
+      ],
+      "exclude": [
+        "aws-sdk"
+      ]
+    }
+  },
+  "endpoints": [
+    {
+      "path": "/",
+      "method": "GET",
+      "type": "AWS",
+      "authorizationType": "none",
+      "authorizerFunction": false,
+      "apiKeyRequired": false,
+      "requestParameters": {},
+      "requestTemplates": "$${apiRequestTemplate}",
+      "responses": {
+        "400": {
+          "statusCode": "400"
+        },
+        "default": {
+          "statusCode": "200",
+          "responseParameters": {},
+          "responseModels": {
+            "text/html": "Empty"
+          },
+          "responseTemplates": {
+            "text/html": "#set($inputRoot = $input.path('$'))$inputRoot"
+          }
+        }
+      }
+    },
+    {
+      "path": "/sitemap.txt",
+      "method": "GET",
+      "type": "HTTP",
+      "authorizationType": "none",
+      "authorizerFunction": false,
+      "apiKeyRequired": false,
+      "requestParameters": {},
+      "requestTemplates": "$${apiRequestTemplate}",
+      "responses": {
+        "400": {
+          "statusCode": "400"
+        },
+        "default": {
+          "statusCode": "200",
+          "responseParameters": {},
+          "responseModels": {
+            "text/html": "Empty"
+          },
+          "responseTemplates": {
+            "text/html": "#set($inputRoot = $input.path('$'))$inputRoot"
+          }
+        }
+      },
+      "targetMethod": "GET",
+      "uri": "${staticURL}sitemap.txt"
+    }
+  ],
+  "events": [],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}",
+    "STATIC_URL": "${staticURL}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}

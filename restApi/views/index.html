@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{> header title='Landsat on AWS'}}
+
+  <body>
+    <div class="container col-xs-12 col-md-8 col-md-offset-2">
+      <header>
+        <div class="jumbotron">
+          <a href="http://aws.amazon.com/what-is-cloud-computing"><img src="{{staticURL}}assets/img/375px-AWS_Logo_Web-Black.png" alt="Powered by AWS Cloud Computing" class="pull-right" id="aws_header_logo"></a>
+          <h1>Landsat on AWS</h1>
+          <hr>
+          <p class="lead"><a href="https://aws.amazon.com/public-data-sets/landsat">Landsat on AWS</a> makes Landsat data available for anyone to use via Amazon S3. All Landsat 8 scenes from 2015 are available along with a selection of cloud-free scenes from 2013 and 2014. All new Landsat 8 scenes are made available each day, often within hours of production.</p>
+          <p>This site allows you to browse all Landsat imagery available on AWS.</p>
+          <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+              <p><a class="btn btn-default btn-lg btn-block" href="{{basePath}}/L8" role="button">Explore Landsat Imagery</a></p>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Recent Landsat Scenes</h2>
+        </div>
+        {{#featured}}
+          <div class="col-md-3">
+            <img src="http://landsat-pds.s3.amazonaws.com/L8/{{path}}/{{row}}/{{id}}/{{id}}_thumb_large.jpg" class="img-responsive">
+            <p><a href="{{../basePath}}/L8/{{path}}/{{row}}/{{id}}/">{{path}}/{{row}}</a><br>
+            <span class="small">Acquired {{date}}.</span></p>
+          </div>
+        {{/featured}}
+      </div>
+      <hr>
+      <div class="row marketing">
+        <div class="col-md-6">
+          <h3>About Landsat</h3>
+          <p>The Landsat program is a joint effort of the U.S. Geological Survey and NASA and is the longest running program to gather Earth imagery from space.</p>
+          <p>Learn more at <a href="http://landsat.gsfc.nasa.gov/">NASA&rsquo;s Landsat Science site</a>.</p>
+        </div>
+
+        <div class="col-md-6">
+          <h3>Accessing Landsat on AWS</h3>
+          <p>All data is available in the <code>landsat-pds</code> Amazon S3 bucket in the in US West (Oregon) AWS Region. Data is optimized for programattic access from <a href="https://aws.amazon.com/ec2">Amazon EC2</a>.</p>
+          <p>More information on accessing <a href="https://aws.amazon.com/public-data-sets/landsat/">Landsat on AWS</a>.</p>
+        </div>
+      </div>
+
+      {{> footer}}
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{staticURL}}assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

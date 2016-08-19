@@ -1,0 +1,17 @@
+{
+  "name": "landsatonaws",
+  "custom": {
+    "client": {
+      "bucketName": "landsatonaws.com-${stage}-${region}"
+    }
+  },
+  "plugins": [
+    "serverless-optimizer-plugin",
+    "serverless-client-s3"
+  ],
+  "version": "0.2.0",
+  "profile": "serverless-v0.5.0",
+  "location": "https://github.com/awslabs/landsat-on-aws",
+  "author": "Joe Flasher",
+  "description": "An example of using a serverless environment to provide data pages for Landast 8 imagery."
+}

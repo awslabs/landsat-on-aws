@@ -1,0 +1,61 @@
+{
+  "name": "landsat-pr",
+  "runtime": "nodejs",
+  "description": "Handler for path/row queries",
+  "customName": false,
+  "customRole": false,
+  "handler": "landsat/pathRow/handler.handler",
+  "timeout": 6,
+  "memorySize": 256,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": [],
+    "envVars": [],
+    "optimize": {
+      "transforms": [
+        "brfs"
+      ],
+      "exclude": [
+        "aws-sdk"
+      ]
+    }
+  },
+  "endpoints": [
+    {
+      "path": "/L8/{path}/{row}",
+      "method": "GET",
+      "type": "AWS",
+      "authorizationType": "none",
+      "authorizerFunction": false,
+      "apiKeyRequired": false,
+      "requestParameters": {},
+      "requestTemplates": "$${apiRequestTemplate}",
+      "responses": {
+        "400": {
+          "statusCode": "400"
+        },
+        "default": {
+          "statusCode": "200",
+          "responseParameters": {},
+          "responseModels": {
+            "text/html": "Empty"
+          },
+          "responseTemplates": {
+            "text/html": "#set($inputRoot = $input.path('$'))$inputRoot"
+          }
+        }
+      }
+    }
+  ],
+  "events": [],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}",
+    "STATIC_URL": "${staticURL}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}

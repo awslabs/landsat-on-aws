@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{> header title=title }}
+
+  <body>
+    <div class="container col-xs-12 col-md-8 col-md-offset-2">
+      <header>
+        <a href="http://aws.amazon.com/what-is-cloud-computing"><img src="{{staticURL}}assets/img/375px-AWS_Logo_Web-Black.png" alt="Powered by AWS Cloud Computing" class="pull-right" id="aws_header_logo"></a>
+        <p><a href="{{#if basePath}}{{basePath}}{{else}}/{{/if}}">Landsat on AWS</a> / <a href="{{basePath}}/L8">L8</a> / <a href="{{basePath}}/L8/{{path}}">{{path}}</a> / <a href="{{basePath}}/L8/{{path}}/{{row}}">{{row}}</a></p>
+        <h1>{{scene.id}}</h1>
+        <p>
+          Endpoint: <code>s3://landsat-pds/L8/{{path}}/{{row}}/{{scene.id}}/</code>
+        </p>
+      </header>
+      <hr>
+      <div class="row">
+
+      <div class="col-md-7">
+        <h2>True Color Preview</h2>
+        <img src="{{scene.thumbnail}}" class="img-responsive">
+        <p>Image courtesy of the U.S. Geological Survey</p>
+        <p>Image acquired at {{scene.date}}<br>
+        Cloud cover: {{scene.cloudCover}}%
+        </p>
+      </div>
+
+      <div class="col-md-5">
+        <h2>Files</h2>
+        <h3>GeoTIFFs</h3>
+        <ul class="scene_files">
+          {{#scene.files.tiffs}}
+            <li><samp>{{.}}</samp></li>
+          {{/scene.files.tiffs}}
+        </ul>
+        <h3>Overview Files</h3>
+        <ul class="scene_files">
+          {{#scene.files.overviews}}
+            <li><samp>{{.}}</samp></li>
+          {{/scene.files.overviews}}
+        </ul>
+        <h3>JPEG Previews</h3>
+        <ul class="scene_files">
+          {{#scene.files.previews}}
+            <li><samp>{{.}}</samp></li>
+          {{/scene.files.previews}}
+        </ul>
+        <h3>Metadata Files</h3>
+        <ul class="scene_files">
+          {{#scene.files.metadata}}
+            <li><samp>{{.}}</samp></li>
+          {{/scene.files.metadata}}
+        </ul>
+      </div>
+
+      {{> footer}}
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{staticURL}}assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

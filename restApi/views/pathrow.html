@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{> header title=title }}
+
+  <body>
+    <div class="container col-xs-12 col-md-8 col-md-offset-2">
+      <header>
+        <a href="http://aws.amazon.com/what-is-cloud-computing"><img src="{{staticURL}}assets/img/375px-AWS_Logo_Web-Black.png" alt="Powered by AWS Cloud Computing" class="pull-right" id="aws_header_logo"></a>
+        <p><a href="{{#if basePath}}{{basePath}}{{else}}/{{/if}}">Landsat on AWS</a> / <a href="{{basePath}}/L8">L8</a> / <a href="{{basePath}}/L8/{{path}}">{{path}}</a> / {{row}}</p>
+        <h1>Landsat Scenes for Path {{path}} / Row {{row}}</h1>
+      </header>
+      <hr>
+      <div class="row">
+      <div class="col-md-6">
+        <h3>True Color Preview</h3>
+        <img src="http://landsat-pds.s3.amazonaws.com/L8/{{path}}/{{row}}/{{lastScene.id}}/{{lastScene.id}}_thumb_large.jpg" class="img-responsive">
+        <p>Latest image acquired at {{lastScene.date}}.</p>
+      </div>
+      <div class="col-md-6">
+      <h3>Available Scenes</h3>
+      <table class="table table-striped">
+        <tbody>
+          <thead>
+            <th>Scene ID</th>
+            <th>Date Acquired</th>
+            <th>Cloud Cover</th>
+          </thead>
+          {{#scenes}}
+            <tr>
+              <td><a href="{{../basePath}}/L8/{{../path}}/{{../row}}/{{id}}">{{id}}</a></td>
+              <td>{{date}}</td>
+              <td>{{cloudCover}}%</td>
+            </tr>
+          {{/scenes}}
+        </tbody>
+      </table>
+
+      {{> footer}}
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{staticURL}}assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

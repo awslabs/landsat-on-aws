@@ -1,0 +1,42 @@
+{
+  "name": "landsat-updater",
+  "runtime": "nodejs",
+  "description": "Update static data on S3.",
+  "customName": false,
+  "customRole": false,
+  "handler": "landsat/updater/handler.handler",
+  "timeout": 180,
+  "memorySize": 1536,
+  "authorizer": {},
+  "custom": {
+    "excludePatterns": [],
+    "envVars": [],
+    "optimize": {
+      "exclude": [
+        "aws-sdk"
+      ]
+    }
+  },
+  "endpoints": [],
+  "events": [
+    {
+      "name": "dailyUpdate",
+      "type": "schedule",
+      "config": {
+        "schedule": "rate(6 hours)",
+        "enabled": true
+      }
+    }
+  ],
+  "environment": {
+    "SERVERLESS_PROJECT": "${project}",
+    "SERVERLESS_STAGE": "${stage}",
+    "SERVERLESS_REGION": "${region}",
+    "BASE_URL": "${baseURL}",
+    "STATIC_URL": "${staticURL}"
+  },
+  "vpc": {
+    "securityGroupIds": [],
+    "subnetIds": []
+  }
+}

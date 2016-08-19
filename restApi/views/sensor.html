@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {{> header title='Landsat on AWS - L8'}}
+
+  <body>
+    <div class="container col-xs-12 col-md-8 col-md-offset-2">
+      <header>
+        <a href="http://aws.amazon.com/what-is-cloud-computing"><img src="{{staticURL}}assets/img/375px-AWS_Logo_Web-Black.png" alt="Powered by AWS Cloud Computing" class="pull-right" id="aws_header_logo"></a>
+        <p><a href="{{#if basePath}}{{basePath}}{{else}}/{{/if}}">Landsat on AWS</a> / L8</p>
+        <h1>Landsat Paths</h1>
+      </header>
+
+      <ul class="landsat_nav_list">
+        {{#paths}}
+          <li><a href="{{../basePath}}/L8/{{.}}/">{{.}}</a></li>
+        {{/paths}}
+      </ul>
+
+      {{> footer}}
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{staticURL}}assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

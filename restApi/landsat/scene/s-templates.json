@@ -1,0 +1,9 @@
+{
+  "apiRequestTemplate": {
+    "application/json": {
+      "path": "$input.params('path')",
+      "row": "$input.params('row')",
+      "scene": "$input.params('scene')"
+    }
+  }
+}
