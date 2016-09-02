@@ -17,6 +17,10 @@ module.exports.landsatRoot = function (event, cb) {
     Key: 'featured.csv'
   };
   s3.getObject(params, function (err, data) {
+    if (err) {
+      console.error(err);
+    }
+
     var featured = data.Body.toString('utf8');
     featured = featured.split('\n'); // We have one string, turn into an array
     featured = featured.map(function (f) {
@@ -95,7 +99,7 @@ module.exports.landsatPath = function (event, cb) {
     // Render template with Handlebars
     var source = fs.readFileSync(path.join(__dirname, '..', 'views', 'path.html'), 'utf8');
     var template = h.compile(source);
-    var context = {prs: prs, path: event.path, title: title, basePath: helpers.getBasePath(process.env.SERVERLESS_STAGE), staticURL: process.env.STATIC_URL}
+    var context = {prs: prs, path: event.path, title: title, basePath: helpers.getBasePath(process.env.SERVERLESS_STAGE), staticURL: process.env.STATIC_URL};
     return cb(err, template(context));
   });
 };
@@ -159,7 +163,7 @@ module.exports.landsatSingleScene = function (event, cb) {
     };
 
     // Add thumbnail to scene object
-    scene.thumbnail = 'http://landsat-pds.s3.amazonaws.com/L8/' + event.path + '/' + event.row + '/' + event.scene + '/' + event.scene + '_thumb_large.jpg';
+    scene.thumbnail = 'https://landsat-pds.s3.amazonaws.com/L8/' + event.path + '/' + event.row + '/' + event.scene + '/' + event.scene + '_thumb_large.jpg';
 
     // Add cloud cover
     scene.cloudCover = results.metadata.L1_METADATA_FILE.IMAGE_ATTRIBUTES.CLOUD_COVER;
