@@ -23,8 +23,20 @@ var fs = require('fs');
 var path = require('path');
 var helpers = require('./helpers');
 
-// Landsat - Path and Row query
+// Landsat - Root query, handle landing page and /sceneID
 module.exports.landsatRoot = function (event, cb) {
+  // Handle redirect to scene page if we have a sceneID
+  if (event.sceneID) {
+    const path = event.sceneID.substr(3, 3);
+    const row = event.sceneID.substr(6, 3);
+    // Note: This will only work for top level domains and will not work if stage is
+    // required in URL
+    const location = 'https://' + event.Host + '/L8/' + path + '/' + row + '/' + event.sceneID;
+
+    return cb(null, {location: location});
+  }
+
+  // If we're still here, serve up the landing page
   var params = {
     Bucket: helpers.getStaticBucket(),
     Key: 'featured.csv'
