@@ -30,25 +30,25 @@
         <h3>GeoTIFFs</h3>
         <ul class="scene_files">
           {{#scene.files.tiffs}}
-            <li><samp>{{.}}</samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.tiffs}}
         </ul>
         <h3>Overview Files</h3>
         <ul class="scene_files">
           {{#scene.files.overviews}}
-            <li><samp>{{.}}</samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.overviews}}
         </ul>
         <h3>JPEG Previews</h3>
         <ul class="scene_files">
           {{#scene.files.previews}}
-            <li><samp>{{.}}</samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.previews}}
         </ul>
         <h3>Metadata Files</h3>
         <ul class="scene_files">
           {{#scene.files.metadata}}
-            <li><samp>{{.}}</samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.metadata}}
         </ul>
       </div>

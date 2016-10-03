@@ -1,0 +1,8 @@
+{
+  "apiRequestTemplate": {
+    "application/json": {
+      "sceneID": "$input.params('sceneID')",
+      "Host": "$input.params('Host')"
+    }
+  }
+}

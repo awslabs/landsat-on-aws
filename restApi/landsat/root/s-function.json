@@ -72,6 +72,31 @@
       },
       "targetMethod": "GET",
       "uri": "${staticURL}sitemap.txt"
+    },
+    {
+      "path": "/{sceneID}",
+      "method": "GET",
+      "type": "AWS",
+      "authorizationType": "none",
+      "authorizerFunction": false,
+      "apiKeyRequired": false,
+      "requestParameters": {},
+      "requestTemplates": "$${apiRequestTemplate}",
+      "responses": {
+        "400": {
+          "statusCode": "400"
+        },
+        "default": {
+          "statusCode": "302",
+          "responseParameters": {
+            "method.response.header.Location": "integration.response.body.location"
+          },
+          "responseModels": {
+            "text/html": "Empty"
+          },
+          "responseTemplates": {}
+        }
+      }
     }
   ],
   "events": [],
