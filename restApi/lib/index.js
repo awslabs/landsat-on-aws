@@ -74,18 +74,58 @@ module.exports.landsatRoot = function (event, cb) {
 
 // Landsat - Path and Row query
 module.exports.landsatPR = function (event, cb) {
-  var params = {
-    Bucket: helpers.getStaticBucket(),
-    Key: 'paths/' + event.path + '.csv'
-  };
-  s3.getObject(params, function (err, data) {
-    var scenes = data.Body.toString('utf8');
-    scenes = scenes.split('\n'); // We have one string, turn into an array
-    scenes = helpers.getScenesForPR(scenes, event.path, event.row); // Narrow down scenes to our specific PR combo
-    scenes.sort(function (a, b) {
-      return new Date(b.date) - new Date(a.date);
-    });
+  var tasks = {
+    scenes: function (done) {
+      var params = {
+        Bucket: helpers.getStaticBucket(),
+        Key: 'paths/' + event.path + '.csv'
+      };
+      s3.getObject(params, function (err, data) {
+        var scenes = data.Body.toString('utf8');
+        scenes = scenes.split('\n'); // We have one string, turn into an array
+        scenes = helpers.getScenesForPR(scenes, event.path, event.row); // Narrow down scenes to our specific PR combo
+        scenes.sort(function (a, b) {
+          return new Date(b.date) - new Date(a.date);
+        });
 
+        return done(err, scenes);
+      });
+    },
+    poi: function (done) {
+      var params = {
+        Bucket: helpers.getStaticBucket(),
+        Key: 'poi/' + event.path + '.json'
+      };
+      s3.getObject(params, function (err, data) {
+        var json = JSON.parse(data.Body.toString('utf8'));
+        var poi = json[event.row];
+
+        // Limit parks to first 10
+        poi.parks = poi.parks.slice(0, 9);
+
+        // Limit monuments to first 10, all should already have links
+        poi.monuments = poi.monuments.slice(0, 9);
+
+        // Combine cities, states, continents into one array
+        poi.locations = poi.cities.concat(poi.states, poi.continents);
+        delete poi.states;
+        delete poi.continents;
+        delete poi.cities;
+
+        // If we have no elements in the poi object, make it null
+        var count = 0;
+        for (var k in poi) {
+          count += poi[k].length;
+        }
+        if (count === 0) {
+          poi = null;
+        }
+
+        return done(err, poi);
+      });
+    }
+  };
+  async.parallel(tasks, function (err, results) {
     // Register partials with Handlebars
     h.registerPartial('footer', (fs.readFileSync(path.join(__dirname, '..', 'views', 'partials', 'footer.html'), 'utf8')));
     h.registerPartial('header', (fs.readFileSync(path.join(__dirname, '..', 'views', 'partials', 'header.html'), 'utf8')));
@@ -97,7 +137,7 @@ module.exports.landsatPR = function (event, cb) {
     // Render template with Handlebars
     var source = fs.readFileSync(path.join(__dirname, '..', 'views', 'pathrow.html'), 'utf8');
     var template = h.compile(source);
-    var context = {scenes: scenes, lastScene: scenes[0], path: event.path, row: event.row, title: title, basePath: helpers.getBasePath(process.env.SERVERLESS_STAGE), staticURL: process.env.STATIC_URL};
+    var context = {scenes: results.scenes, lastScene: results.scenes[0], poi: results.poi, path: event.path, row: event.row, title: title, basePath: helpers.getBasePath(process.env.SERVERLESS_STAGE), staticURL: process.env.STATIC_URL};
     return cb(err, template(context));
   });
 };
