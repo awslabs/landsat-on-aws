@@ -106,6 +106,13 @@ header {padding:1.5em 0 .5em;}
     margin-top: 1em;
 }
 
+div.poi {
+    border-top-width: 1px;
+    border-top-color: #dddddd;
+    border-top-style: solid;
+    padding-top: 1em;
+}
+
 ul.landsat_nav_list, ul.scene_files {
     list-style-type: none;
     padding:0;

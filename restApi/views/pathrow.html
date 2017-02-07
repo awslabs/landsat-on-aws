@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  {{> header title=title }}
+  {{> header title=title locations=poi.locations }}
 
   <body>
     <div class="container col-xs-12 col-md-8 col-md-offset-2">
@@ -16,6 +16,21 @@
         <h3>True Color Preview</h3>
         <img src="https://landsat-pds.s3.amazonaws.com/L8/{{path}}/{{row}}/{{lastScene.id}}/{{lastScene.id}}_thumb_large.jpg" class="img-responsive">
         <p>Latest image acquired at {{lastScene.date}}.</p>
+        {{#if poi}}
+          <h3>Places of interest in this image</h3>
+          <div class="poi">
+          {{#if poi.locations}}
+          <h4><span class="glyphicon glyphicon glyphicon-map-marker" aria-hidden="true"></span> Administrative Areas</h4><ul>{{#poi.locations}}<li>{{.}}</li>{{/poi.locations}}</ul>
+          {{/if}}
+          {{#if poi.parks}}
+          <h4><span class="glyphicon glyphicon-tree-conifer" aria-hidden="true"></span> National Parks</h4><ul>{{#poi.parks}}<li>{{#if url}}<a href="{{url}}" target="_blank">{{/if}}{{name}}{{#if url}}</a>{{/if}}</li>{{/poi.parks}}</ul>
+          {{/if}}
+          {{#if poi.monuments}}
+          <h4><span class="glyphicon glyphicon-knight" aria-hidden="true"></span> Monuments</h4><ul>{{#poi.monuments}}<li>{{#if url}}<a href="{{url}}" target="_blank">{{/if}}{{name}}{{#if url}}</a>{{/if}}</li>{{/poi.monuments}}</ul>
+          {{/if}}
+          <p>Location Information from <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a></p>
+          </div>
+        {{/if}}
       </div>
       <div class="col-md-6">
       <h3>Available Scenes</h3>
