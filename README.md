@@ -27,7 +27,7 @@ The project structure is a slightly modified version of the [serverless-starter]
 
 The project relies on dynamically generating HTML output using Lambda functions at request time (requests handled by API Gateway). An updater runs throughout the day to check the latest files in the `landsat-pds` S3 bucket and creates a small number of underlying data files that get stored on S3. These files are requested by Lambda functions as needed, before HTML is returned. This means that we are only serving content-full (as opposed to using JavaScript to load data within the page itself) from API Gateway, which makes indexing easier. This also means that outside of our small set of data files, we are not storing anything to present the hundreds of thousands of pages needed to reflect the underlying Landsat imagery.
 
-## To run 
+## To run
 
 1. Download [Node.js](https://nodejs.org/download/) and install it.
 2. Clone or download this repository and go into the project folder.
@@ -35,9 +35,9 @@ The project relies on dynamically generating HTML output using Lambda functions 
 4. Install package dependencies: `npm install`
 5. Init the serverless project and follow the prompts: `sls project init`
 6. Deploy the client and take note of the S3 bucket URL returned (this  deploys some static assets to S3): `sls client deploy`
-7. The first time you run it, you  need to add two properties to the newly created `_meta/s-variables-common.json` file:  
+7. The first time you run it, you  need to add two properties to the newly created `_meta/s-variables-common.json` file:
 >* `baseURL` is the base URL of the website (this goes into creating the sitemap; if you don't care about that, go ahead and leave this blank)
->* `staticURL` is the URL of the S3 bucket for static assets (you see the bucket after running `sls client deploy`) 
+>* `staticURL` is the URL of the S3 bucket for static assets (you see the bucket after running `sls client deploy`)
 
 This should look something like the following (make sure the format matches and includes 'https' and a trailing slash'; keep in mind `us-east-1` just used `s3.amazonaws.com/foo`).
 >>```
@@ -48,7 +48,7 @@ This should look something like the following (make sure the format matches and 
 ## To deploy
 Deploy all the functions and endpoints one time. From then on, you can just deploy as you make changes to individual files. There are a number of different ways to deploy with Serverless (see the  [Serverless Framework documentation](https://serverless.com/framework/docs/))
 
-1. To deploy all, try `sls dash deploy`, select everything, and deploy. 
+1. To deploy all, try `sls dash deploy`, select everything, and deploy.
 2. Run the `landsat-updater` function one time to build up some required static files on S3: `sls function run landsat-updater -d`
 
 >**Note** If you're just testing, you don't need to deploy the `landsat-updater` *event*, which runs periodically to keep files up to date.
@@ -57,3 +57,6 @@ After you've deployed everything, you should see a URL to your endpoints to test
 
 `sls client deploy` currently overwrites other files when deploying, which removes the data files created by running `landsat-updater`. To work around this, you can either rerun `landsat-updater` after each deployment of static assets, or you can deploy assets manually by running something like the following:
     `aws s3 cp client/dist/assets s3://landsatonaws.com-dev-us-west-2/assets --recursive`
+
+## Points of Interest
+You can also optionally show points of interest data for each Landsat scene. This data is pulled from [OpenStreetMap](https://www.openstreetmap.org/) and uses Mapbox's [OSM QA Tiles](http://osmlab.github.io/osm-qa-tiles/) project. To generate these files, download the latest planet file, run `node index.js --source latest-planet.mbtiles --map map.js` and upload generated files with a key prefix of `poi/` to your Amazon S3 bucket for the project. Currently, national parks, cities/states/countries and monuments are being pulled from OSM data. You can change this in the `poi/map.js` file.
