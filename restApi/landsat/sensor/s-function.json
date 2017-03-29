@@ -1,6 +1,6 @@
 {
   "name": "landsat-sensor",
-  "runtime": "nodejs",
+  "runtime": "nodejs4.3",
   "description": "Handler for sensor page",
   "customName": false,
   "customRole": false,

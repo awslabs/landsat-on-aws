@@ -1,6 +1,6 @@
 {
   "name": "landsat-pr",
-  "runtime": "nodejs",
+  "runtime": "nodejs4.3",
   "description": "Handler for path/row queries",
   "customName": false,
   "customRole": false,
