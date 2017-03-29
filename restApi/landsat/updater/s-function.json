@@ -1,6 +1,6 @@
 {
   "name": "landsat-updater",
-  "runtime": "nodejs",
+  "runtime": "nodejs4.3",
   "description": "Update static data on S3.",
   "customName": false,
   "customRole": false,

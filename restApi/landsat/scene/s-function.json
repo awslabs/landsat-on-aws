@@ -1,6 +1,6 @@
 {
   "name": "landsat-scene",
-  "runtime": "nodejs",
+  "runtime": "nodejs4.3",
   "description": "Handler for scene queries",
   "customName": false,
   "customRole": false,
