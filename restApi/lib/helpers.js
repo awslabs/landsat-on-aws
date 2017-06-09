@@ -20,7 +20,8 @@
 module.exports.getScenesForPR = function (scenes, path, row) {
   var arr = [];
   scenes.forEach(function (s) {
-    if (s.substring(3, 9) === path + '' + row) {
+    if (s.substring(3, 9) === path + '' + row ||
+      s.substring(10, 16) === path + '' + row) {
       var sceneArr = s.split(',');
       arr.push({
         id: sceneArr[0],

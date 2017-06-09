@@ -10,7 +10,7 @@
         <p><a href="{{#if basePath}}{{basePath}}{{else}}/{{/if}}">Landsat on AWS</a> / <a href="{{basePath}}/L8">L8</a> / <a href="{{basePath}}/L8/{{path}}">{{path}}</a> / <a href="{{basePath}}/L8/{{path}}/{{row}}">{{row}}</a></p>
         <h1>{{scene.id}}</h1>
         <p>
-          Endpoint: <code>s3://landsat-pds/L8/{{path}}/{{row}}/{{scene.id}}/</code>
+          Endpoint: <code>s3://landsat-pds/{{collection}}/{{path}}/{{row}}/{{scene.id}}/</code>
         </p>
       </header>
       <hr>
@@ -30,25 +30,25 @@
         <h3>GeoTIFFs</h3>
         <ul class="scene_files">
           {{#scene.files.tiffs}}
-            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/{{../collection}}/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.tiffs}}
         </ul>
         <h3>Overview Files</h3>
         <ul class="scene_files">
           {{#scene.files.overviews}}
-            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/{{../collection}}/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.overviews}}
         </ul>
         <h3>JPEG Previews</h3>
         <ul class="scene_files">
           {{#scene.files.previews}}
-            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/{{../collection}}/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.previews}}
         </ul>
         <h3>Metadata Files</h3>
         <ul class="scene_files">
           {{#scene.files.metadata}}
-            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/L8/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
+            <li><samp><a href="http://landsat-pds.s3.amazonaws.com/{{../collection}}/{{../path}}/{{../row}}/{{../scene.id}}/{{.}}">{{.}}</a></samp></li>
           {{/scene.files.metadata}}
         </ul>
       </div>

@@ -15,7 +15,8 @@
  * Handler functions
  */
 
-var AWS = require('aws-sdk');
+var AWSXRay = require('aws-xray-sdk-core');
+var AWS = AWSXRay.captureAWS(require('aws-sdk'));
 var s3 = new AWS.S3();
 var async = require('async');
 var h = require('Handlebars');
@@ -27,8 +28,14 @@ var helpers = require('./helpers');
 module.exports.landsatRoot = function (event, cb) {
   // Handle redirect to scene page if we have a sceneID
   if (event.sceneID) {
-    const path = event.sceneID.substr(3, 3);
-    const row = event.sceneID.substr(6, 3);
+    var path = event.sceneID.substr(3, 3);
+    var row = event.sceneID.substr(6, 3);
+    // Handle collections productID
+    if (event.sceneID.substr(0, 4) === 'LC08') {
+      path = event.sceneID.substr(10, 3);
+      row = event.sceneID.substr(13, 3);
+    }
+
     // Note: This will only work for top level domains and will not work if stage is
     // required in URL
     const location = 'https://' + event.Host + '/L8/' + path + '/' + row + '/' + event.sceneID;
@@ -55,7 +62,9 @@ module.exports.landsatRoot = function (event, cb) {
         date: helpers.niceDate(scene[1]),
         cloudCover: scene[2],
         path: scene[3],
-        row: scene[4]
+        row: scene[4],
+        collection: scene[5],
+        baseURL: scene[6]
       };
     });
 
@@ -198,9 +207,14 @@ module.exports.landsatSensor = function (event, cb) {
 module.exports.landsatSingleScene = function (event, cb) {
   var tasks = {
     files: function (done) {
+      var prefix = 'L8/' + event.path + '/' + event.row + '/' + event.scene + '/';
+      // Handle C1 paths as well
+      if (event.scene.substring(0, 4) === 'LC08') {
+        prefix = 'c1/' + prefix;
+      }
       var params = {
         Bucket: 'landsat-pds',
-        Prefix: 'L8/' + event.path + '/' + event.row + '/' + event.scene + '/'
+        Prefix: prefix
       };
       s3.listObjects(params, function (err, data) {
         data = data.Contents.map(function (d) {
@@ -210,9 +224,14 @@ module.exports.landsatSingleScene = function (event, cb) {
       });
     },
     metadata: function (done) {
+      var key = 'L8/' + event.path + '/' + event.row + '/' + event.scene + '/' + event.scene + '_MTL.json';
+      // Handle C1 paths as well
+      if (event.scene.substring(0, 4) === 'LC08') {
+        key = 'c1/' + key;
+      }
       var params = {
         Bucket: 'landsat-pds',
-        Key: 'L8/' + event.path + '/' + event.row + '/' + event.scene + '/' + event.scene + '_MTL.json'
+        Key: key
       };
       s3.getObject(params, function (err, data) {
         var json = JSON.parse(data.Body);
@@ -227,8 +246,12 @@ module.exports.landsatSingleScene = function (event, cb) {
       files: {}
     };
 
-    // Add thumbnail to scene object
-    scene.thumbnail = 'https://landsat-pds.s3.amazonaws.com/L8/' + event.path + '/' + event.row + '/' + event.scene + '/' + event.scene + '_thumb_large.jpg';
+    // Add thumbnail to scene object, account for collections
+    var base = 'https://landsat-pds.s3.amazonaws.com/';
+    if (event.scene.substring(0, 4) === 'LC08') {
+      base += 'c1/';
+    }
+    scene.thumbnail = base + 'L8/' + event.path + '/' + event.row + '/' + event.scene + '/' + event.scene + '_thumb_large.jpg';
 
     // Add cloud cover
     scene.cloudCover = results.metadata.L1_METADATA_FILE.IMAGE_ATTRIBUTES.CLOUD_COVER;
@@ -250,6 +273,12 @@ module.exports.landsatSingleScene = function (event, cb) {
       return path.extname(s).toLowerCase() === '.txt' || path.extname(s).toLowerCase() === '.json';
     });
 
+    // Set a var to handle collections
+    var collection = 'L8';
+    if (event.scene.substring(0, 4) === 'LC08') {
+      collection = 'c1/L8';
+    }
+
     // Register partials with Handlebars
     h.registerPartial('footer', (fs.readFileSync(path.join(__dirname, '..', 'views', 'partials', 'footer.html'), 'utf8')));
     h.registerPartial('header', (fs.readFileSync(path.join(__dirname, '..', 'views', 'partials', 'header.html'), 'utf8')));
@@ -263,7 +292,7 @@ module.exports.landsatSingleScene = function (event, cb) {
     var template = h.compile(source);
     results.basePath = process.env.BASE_PATH;
     results.staticURL = process.env.STATIC_URL;
-    var context = {path: event.path, row: event.row, scene: scene, title: title, basePath: helpers.getBasePath(process.env.SERVERLESS_STAGE), staticURL: process.env.STATIC_URL};
+    var context = {path: event.path, row: event.row, scene: scene, title: title, collection: collection, basePath: helpers.getBasePath(process.env.SERVERLESS_STAGE), staticURL: process.env.STATIC_URL};
     return cb(err, template(context));
   });
 };
