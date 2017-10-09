@@ -34,58 +34,35 @@ var featuredFile = 'featured.csv';  // Filename for featured images
 
 module.exports.update = function (event, cb) {
   // Download data from S3
-  console.info('Getting latest scene_list from S3 for PRE and C1!');
-  async.parallel([
-    function (done) {
-      var params = {
-        Bucket: 'landsat-pds',
-        Key: 'scene_list.gz'
-      };
-      s3.getObject(params, function (err, data) {
-        if (err) {
-          return done(err);
-        }
-
-        // Unzip the file
-        zlib.gunzip(data.Body, function (err, data) {
-          return done(err, data);
-        });
-      });
-    },
-    function (done) {
-      var params = {
-        Bucket: 'landsat-pds',
-        Key: 'c1/L8/scene_list.gz'
-      };
-      s3.getObject(params, function (err, data) {
-        if (err) {
-          return done(err);
-        }
-
-        // Unzip the file
-        zlib.gunzip(data.Body, function (err, data) {
-          return done(err, data);
-        });
-      });
-    }
-  ], function (err, data) {
+  console.info('Getting latest scene_list from S3 for C1!');
+  var params = {
+    Bucket: 'landsat-pds',
+    Key: 'c1/L8/scene_list.gz'
+  };
+  s3.getObject(params, function (err, data) {
     if (err) {
       return cb(err);
     }
 
-    console.info('Joining PRE and C1 scene lists');
-    var final = data[0].toString();
-    data[1].toString().split('\n').map(function (line) {
-      // Normalize row count and don't include entintyID for C1
-      var orig = line.split(',');
-      orig.splice(1, 1);
-      final += orig + '\n';
-    });
+    // Unzip the file
+    zlib.gunzip(data.Body, function (err, data) {
+      if (err) {
+        return cb(err);
+      }
 
-    console.info('Saving scene_list to disk.');
-    fs.writeFileSync(scenesList, final);
-    processData(function (err, results) {
-      return cb(err, results);
+      var final = '';
+      data.toString().split('\n').map(function (line) {
+        // Don't include entintyID for C1
+        var orig = line.split(',');
+        orig.splice(1, 1);
+        final += orig + '\n';
+      });
+
+      console.info('Saving scene_list to disk.');
+      fs.writeFileSync(scenesList, final);
+      processData(function (err, results) {
+        return cb(err, results);
+      });
     });
   });
 };
