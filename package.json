@@ -16,6 +16,7 @@
     "brfs": "^1.4.3",
     "csv-parse": "^1.1.7",
     "handlebars": "^4.0.5",
+    "serverless": "^0.5.6",
     "serverless-client-s3": "^2.0.0",
     "serverless-optimizer-plugin": "^2.0.0"
   },
