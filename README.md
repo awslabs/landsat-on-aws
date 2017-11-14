@@ -35,11 +35,10 @@ An architectural overview can be seen below (note that there is no Amazon Dynamo
 
 1. Download [Node.js](https://nodejs.org/download/) and install it.
 2. Clone or download this repository and go into the project folder.
-3. Install [serverless](http://serverless.com/) globally: `npm install -g serverless`
-4. Install package dependencies: `npm install`
-5. Init the serverless project and follow the prompts: `sls project init`
-6. Deploy the client and take note of the S3 bucket URL returned (this  deploys some static assets to S3): `sls client deploy`
-7. The first time you run it, you  need to add two properties to the newly created `_meta/s-variables-common.json` file:
+3. Install package dependencies: `npm install`
+4. Init the serverless project and follow the prompts: `./node_modules/serverless/bin/serverless project init`
+5. Deploy the client and take note of the S3 bucket URL returned (this  deploys some static assets to S3): `sls client deploy`
+6. The first time you run it, you  need to add two properties to the newly created `_meta/s-variables-common.json` file:
 >* `baseURL` is the base URL of the website (this goes into creating the sitemap; if you don't care about that, go ahead and leave this blank)
 >* `staticURL` is the URL of the S3 bucket for static assets (you see the bucket after running `sls client deploy`)
 
