@@ -6,7 +6,7 @@
   "customRole": false,
   "handler": "landsat/updater/handler.handler",
   "timeout": 180,
-  "memorySize": 1536,
+  "memorySize": 3008,
   "authorizer": {},
   "custom": {
     "excludePatterns": [],
