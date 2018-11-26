@@ -110,13 +110,13 @@ module.exports.landsatPR = function (event, cb) {
         var poi = json[event.row];
 
         // Limit parks to first 10
-        poi.parks = poi.parks.slice(0, 9);
+        poi.parks = poi.parks ? (poi.parks.slice(0, 9)) : [];
 
         // Limit monuments to first 10, all should already have links
-        poi.monuments = poi.monuments.slice(0, 9);
+        poi.monuments = poi.monuments ? (poi.monuments.slice(0, 9)) : [];
 
         // Combine cities, states, continents into one array
-        poi.locations = poi.cities.concat(poi.states, poi.continents);
+        poi.locations = poi.cities ? (poi.cities.concat(poi.states, poi.continents)) : [];
         delete poi.states;
         delete poi.continents;
         delete poi.cities;
