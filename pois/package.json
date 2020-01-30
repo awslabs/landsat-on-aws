@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "async": "^2.1.4",
-    "csv-parse": "^1.1.7",
+    "csv-parse": "^4.8.5",
     "lodash": "^4.17.2",
     "minimist": "^1.2.0",
     "tile-reduce": "^3.1.1"
