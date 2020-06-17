@@ -70,7 +70,7 @@ module.exports.update = function (event, cb) {
 var processData = function (cb) {
   console.info('Reading in scenes data from ' + scenesList);
   var input = fs.createReadStream(scenesList);
-  var parser = parse();
+  var parser = parse({relax_column_count_less:true});
   input.pipe(parser);
   var obj = {};
   var featured = [];
